@@ -1,0 +1,2 @@
+[console_scripts]
+cv2_enumerate_cameras = cv2_enumerate_cameras.__main__:main
