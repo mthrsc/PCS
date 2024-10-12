@@ -4,7 +4,7 @@ import os
 
 def main():
     app = tkinterApp.tkinterApp()
-    app.geometry("1024x800")
+    app.geometry("1280x800")
 
     #Create a fullscreen window
     # app.state('zoomed')

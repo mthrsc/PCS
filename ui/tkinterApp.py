@@ -16,8 +16,10 @@ class tkinterApp(tk.Tk):
 
         container.pack(side = "top", fill = "both", expand = True)
   
-        container.grid_rowconfigure(list(range(2000)), minsize= 25, uniform = "test")
-        container.grid_columnconfigure(list(range(2000)), minsize= 25, uniform = "test")
+        container.grid_rowconfigure(list(range(2000)), minsize= 1)
+        container.grid_columnconfigure(list(range(2000)), minsize= 1)
+
+        self._selectedCamera = -1
 
         # Set window title
         self.title("PCS - Pokemon Card Scanner")
@@ -46,3 +48,13 @@ class tkinterApp(tk.Tk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+        if hasattr(frame, 'on_show'):
+            frame.on_show()  # Only execute this if the frame has an on_show method
+
+
+    @property
+    def selectedCamera(self):
+        return self._selectedCamera
+    @selectedCamera.setter
+    def selectedCamera(self, value):
+        self._selectedCamera = value

@@ -18,19 +18,3 @@ class Finales():
         return self._MAINLOGOPATH
 
 
-
-
-
-#############################################
-
-class Globals():
-    def __init__(self):
-        ...
-        self._selectedCamera = -1
-
-    @property
-    def selectedCamera(self):
-        return self._selectedCamera
-    @selectedCamera.setter
-    def selectedCamera(self, value):
-        self._selectedCamera = value
