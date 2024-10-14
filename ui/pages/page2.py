@@ -1,7 +1,6 @@
 import tkinter as tk
 import cv2
 from .var import Finales
-from PIL import Image, ImageTk
 from ..vision.card_detection import Card_detection
 
 class Page2(tk.Frame): 
@@ -21,8 +20,8 @@ class Page2(tk.Frame):
         mainLogo.grid(row = 0, column = 0, padx = 0, pady = 0, columnspan = 100)
 
         # Add cv2 release of video feed - self.vid.release()
-        # backBtn = tk.Button(self, text ="Back", command = lambda : [self.vid.release(), cv2.destroyAllWindows(), controller.show_frame(Page1)])
-        # backBtn.grid(row = 100, column = 1)
+        backBtn = tk.Button(self, text ="Back", command = lambda : controller.show_frame(Page1))
+        backBtn.grid(row = 100, column = 1)
 
         # nextBtn = tk.Button(self, text ="Next", command = lambda : controller.show_frame(Page1))
         # nextBtn.grid(row = 100, column = 2)

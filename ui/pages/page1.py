@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import *
+from tkinter import ttk, filedialog
+from tkinter.filedialog import askopenfile
 from .var import Finales
 import cv2
 import threading
@@ -26,15 +28,22 @@ class Page1(tk.Frame):
         mainLogo.pack_propagate(False)
         mainLogo.grid(row = 0, column = 0, padx = 0, pady = 0, columnspan = 100)
 
-        brwsBtn = tk.Button(self, text='Browse...', width='20', height='1', command = lambda : ...)
-        brwsBtn.grid(row = 55, column = 80, padx = 0)
+        brwsBtn = tk.Button(self, text='Browse...', width='20', height='1', command = lambda : self.browse_window())
+        brwsBtn.grid(row = 60, column = 20, padx = 50, pady = 200)
 
         nextBtn = tk.Button(self, text='Next', width='30', height='1', command = lambda : self.next_button())
-        nextBtn.grid(row = 70, column = 80, padx = 0, pady = YpaddingNxtBtn)
+        nextBtn.grid(row = 70, column = 80, padx = 0, pady = 150)
 
     def next_button(self):
         from .page2 import Page2
         self.controller.show_frame(Page2)
+
+    def browse_window(self):
+        files = filedialog.askopenfilenames()
+        print(f"file name is {files}")
+        if len(files) > 0:
+            ...
+            #loop through files
 
     # Add validation on setters !!!!
     @property
