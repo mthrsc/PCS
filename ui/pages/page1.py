@@ -1,10 +1,8 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk, filedialog
+from tkinter import filedialog
 from tkinter.filedialog import askopenfile
 from .var import Finales
-import cv2
-import threading
 from cv2_enumerate_cameras import enumerate_cameras
 from time import sleep
 
@@ -15,14 +13,14 @@ class Page1(tk.Frame):
         tk.Frame.__init__(self, parent)
         self._radioVar = IntVar()
         self._radioVar.set(1)
-        f = Finales()
+        self._f = Finales()
         self._controller = controller
 
         self._filetypes = ("gif", "png", "jpg", "jpeg", "tiff", "bmp")
 
         self._file_to_scan = []
 
-        img = tk.PhotoImage(file= f.MAINLOGOPATH)
+        img = tk.PhotoImage(file= self.f.MAINLOGOPATH)
         mainLogo = tk.Label(self, image=img)
         mainLogo.image = img
         mainLogo.pack_propagate(False)
@@ -44,7 +42,7 @@ class Page1(tk.Frame):
 
         # Create a Text widget
         self._file_text_box = tk.Text(file_frame, wrap="word", yscrollcommand=scrollbar.set, height=10, width=50, state=DISABLED)
-        self.file_text_box.pack(side="left", fill="both", expand=True)
+        self._file_text_box.pack(side="left", fill="both", expand=True)
 
         # Configure the Scrollbar to work with the Text widget
         scrollbar.config(command=self.file_text_box.yview)
@@ -57,7 +55,7 @@ class Page1(tk.Frame):
 
     def next_button(self):
         from .page2 import Page2
-        self.controller.show_frame(Page2)
+        self.controller.show_frame(Page2, self.file_to_scan)
 
     def browse_window(self):
         files = filedialog.askopenfilenames()
@@ -69,7 +67,6 @@ class Page1(tk.Frame):
         result = {}
         for file in files:
             ext = file.rsplit(".",1)[-1]
-            print(ext)
             if ext in self.filetypes:
                 result[file] = "ok"
             else:
@@ -126,3 +123,10 @@ class Page1(tk.Frame):
     @file_text_box.setter
     def file_text_box(self, value):
         self._file_text_box.set(value)
+
+    @property
+    def f(self):
+        return self._f
+    @property
+    def controller(self):
+        return self._controller
