@@ -43,12 +43,12 @@ class tkinterApp(tk.Tk):
   
     # to display the current frame passed as
     # parameter
-    def show_frame(self, cont, data=None):
+    def show_frame(self, cont, file_to_scan=None):
         frame = self.frames[cont]
         frame.tkraise()
 
-        if data and hasattr(frame, 'receive_data'):
-            frame.receive_data(data)
+        if file_to_scan and hasattr(frame, 'receive_data'):
+            frame.receive_data(file_to_scan)
 
         if hasattr(frame, 'on_show'):
             frame.on_show()

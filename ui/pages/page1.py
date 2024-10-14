@@ -18,7 +18,7 @@ class Page1(tk.Frame):
 
         self._filetypes = ("gif", "png", "jpg", "jpeg", "tiff", "bmp")
 
-        self._file_to_scan = []
+        self._files_to_scan = []
 
         img = tk.PhotoImage(file= self.f.MAINLOGOPATH)
         mainLogo = tk.Label(self, image=img)
@@ -55,7 +55,8 @@ class Page1(tk.Frame):
 
     def next_button(self):
         from .page2 import Page2
-        self.controller.show_frame(Page2, self.file_to_scan)
+        self.controller.frames[Page2].receive_data(self.files_to_scan)
+        self.controller.show_frame(Page2)
 
     def browse_window(self):
         files = filedialog.askopenfilenames()
@@ -80,7 +81,7 @@ class Page1(tk.Frame):
                 if validated_files[key] == "ok":
                     self.file_text_box.insert(tk.END, key)
                     self.file_text_box.insert(tk.END, "\n\n")
-                    self.file_to_scan.append(key)
+                    self.files_to_scan.append(key)
                 else:
                     message = key + " - Invalid file format"
                     self.file_text_box.insert(tk.END, message)
@@ -109,12 +110,12 @@ class Page1(tk.Frame):
         self._filetypes.set(value)
 
     @property
-    def file_to_scan(self):
-        return self._file_to_scan
+    def files_to_scan(self):
+        return self._files_to_scan
 
-    @file_to_scan.setter
-    def file_to_scan(self, value):
-        self._file_to_scan.set(value)
+    @files_to_scan.setter
+    def files_to_scan(self, value):
+        self._files_to_scan.set(value)
 
     @property
     def file_text_box(self):
