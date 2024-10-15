@@ -1,7 +1,9 @@
+import threading
+from time import sleep
 import tkinter as tk
 from tkinter import Scrollbar, Canvas, Frame
 from .var import Finales
-from ..imageLogic.card_detection import Card_detection
+from ..imageLogic.card_handling import Card_handling
 from .page1 import Page1 as p1
 from PIL import ImageTk, Image
 
@@ -11,9 +13,12 @@ class Page2(tk.Frame):
         tk.Frame.__init__(self, parent)
         self._f = Finales()
         self._controller = controller
-        self._cd = Card_detection()
+        self.ch = Card_handling()
 
         self._files_to_scan = []
+        self._status = "scanning"
+        # Store the Entry widgets in a list of lists (table structure)
+        self._table = []
 
         img = tk.PhotoImage(file= self.f.MAINLOGOPATH)
         mainLogo = tk.Label(self, image=img)
@@ -21,9 +26,14 @@ class Page2(tk.Frame):
         mainLogo.pack_propagate(False)
         mainLogo.grid(row = 0, column = 0, padx = 0, pady = 0, columnspan = 100)
 
-
         backBtn = tk.Button(self, text ="Back", command = lambda : controller.show_frame(p1))
-        backBtn.grid(row = 100, column = 1)
+        backBtn.grid(row = 150, column = 1)
+
+        self._scan_label = tk.Label(self, text = "Scanning...")
+        self._scan_label.grid(row=150, column=0, padx=5, pady=5, sticky="w")  
+
+        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "scan_label_text")
+        t1.start()
 
     def create_table(self):
 
@@ -63,9 +73,6 @@ class Page2(tk.Frame):
         self.rows = len(self.files_to_scan)
         self.columns = 4
 
-        # Store the Entry widgets in a list of lists (table structure)
-        self.table = []
-
         # Create the table layout
         for i in range(self.rows):
             row_entries = []
@@ -80,8 +87,6 @@ class Page2(tk.Frame):
                     row_entries.append(entry)
             self.table.append(row_entries)
         # End table builder
-
-
 
     def on_show(self):
         ...
@@ -101,7 +106,7 @@ class Page2(tk.Frame):
         # print(self.files_to_scan)
         self.create_table()
         self.populate_table_image()
-
+        self.ch.pre_process_card(self.files_to_scan, self.table)
 
     def populate_table_image(self):
         for idx, file in enumerate(self.files_to_scan):
@@ -118,8 +123,7 @@ class Page2(tk.Frame):
 
         # self.table[1][1].delete(0, tk.END)  # Clear the cell
         # self.table[1][1].insert(0, "Updated")  # Insert new content
-
-    
+ 
     def _on_mousewheel(self, event):
         if event.num == 4:  # Scroll up on macOS (Button-4)
             self.canvas.yview_scroll(-1, "units")
@@ -127,6 +131,22 @@ class Page2(tk.Frame):
             self.canvas.yview_scroll(1, "units")
         else:  # For Windows and Linux
             self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+    def scan_label_text(self, scan_label):
+        i = 1
+        while self.status == "scanning":
+            message = "Scanning"
+            x = 0
+            while x < i:
+                message = message + "."
+                x = x + 1
+            scan_label.config(text = message)
+            i = i + 1
+            if i == 4:
+                i = 1
+            sleep(1)
+
+
 
     @property
     def f(self):
@@ -136,16 +156,33 @@ class Page2(tk.Frame):
         return self._controller
 
     @property
-    def cd(self):
-        return self._cd
-    @cd.setter
-    def cd(self, value):
-        self._cd = value
-
-    @property
     def files_to_scan(self):
         return self._files_to_scan
 
     @files_to_scan.setter
     def files_to_scan(self, value):
         self._files_to_scan = value
+
+    @property
+    def scan_label(self):
+        return self._scan_label
+
+    @scan_label.setter
+    def scan_label(self, value):
+        self._scan_label = value
+
+    @property
+    def status(self):
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        self._status = value
+
+    @property
+    def table(self):
+        return self._table
+
+    @table.setter
+    def table(self, value):
+        self._table = value

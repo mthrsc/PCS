@@ -47,8 +47,8 @@ class tkinterApp(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
-        if file_to_scan and hasattr(frame, 'receive_data'):
-            frame.receive_data(file_to_scan)
-
         if hasattr(frame, 'on_show'):
             frame.on_show()
+            
+        if file_to_scan and hasattr(frame, 'receive_data'):
+            frame.receive_data(file_to_scan)
