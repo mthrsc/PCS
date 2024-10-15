@@ -1,8 +1,8 @@
 import tkinter as tk
+from tkinter import Scrollbar, Canvas, Frame
 from .var import Finales
-from ..vision.card_detection import Card_detection
+from ..imageLogic.card_detection import Card_detection
 from .page1 import Page1 as p1
-from tkinter import PhotoImage
 from PIL import ImageTk, Image
 
 class Page2(tk.Frame): 
@@ -22,37 +22,42 @@ class Page2(tk.Frame):
         mainLogo.grid(row = 0, column = 0, padx = 0, pady = 0, columnspan = 100)
 
 
-        # self.create_table()
-
-
         backBtn = tk.Button(self, text ="Back", command = lambda : controller.show_frame(p1))
         backBtn.grid(row = 100, column = 1)
 
     def create_table(self):
-        # Create a frame for the scrollbar and the canvas
-        self.frame = tk.Frame(self)
-        self.frame.grid(row=2, column=0, padx=10, pady=10, sticky="w")
 
-        # Create a canvas to hold the table
-        self.canvas = tk.Canvas(self.frame)
-        self.canvas.pack(side="left", fill="both", expand=True)
+        # Create a canvas widget
+        self.canvas = Canvas(self)
+        self.canvas.grid(row=1, column=0, sticky="nsew", columnspan=200)
 
         # Create a vertical scrollbar linked to the canvas
-        self.scrollbar = tk.Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
-        self.scrollbar.pack(side="right", fill="y")
+        self.v_scroll = Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.v_scroll.grid(row=1, column=1, sticky="ns")
 
-        # Configure the canvas to use the scrollbar
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        # Create a horizontal scrollbar linked to the canvas
+        self.h_scroll = Scrollbar(self, orient="horizontal", command=self.canvas.xview)
+        self.h_scroll.grid(row=2, column=0, sticky="ew")
 
-        # Create a frame inside the canvas to hold the table content
-        self.table_frame = tk.Frame(self.canvas)
+        # Configure the canvas to work with scrollbars
+        self.canvas.configure(yscrollcommand=self.v_scroll.set, xscrollcommand=self.h_scroll.set)
 
-        # Add the table frame to the canvas
+        # Create a frame inside the canvas to hold the table (cells)
+        self.table_frame = Frame(self.canvas)
+
+        # Add the table_frame to the canvas
         self.canvas.create_window((0, 0), window=self.table_frame, anchor="nw")
 
-        # Bind the canvas to resize when the window is adjusted
-        # self.table_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
-
+        # Configure grid behavior for resizing
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        
+        # Bind an event to resize the canvas scroll region
+        self.table_frame.bind("<Configure>", lambda event: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+        
+        # Bind mouse scroll to the canvas
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)  # Windows and Linux
+        
         #Begin table builder
         print("len: " + str(len(self.files_to_scan)))
         self.rows = len(self.files_to_scan)
@@ -67,14 +72,13 @@ class Page2(tk.Frame):
             for j in range(self.columns):
                 if j == 0:
                     label = tk.Label(self.table_frame, relief="solid")
-                    label.grid(row=i+20, column=j, padx=5, pady=5)
+                    label.grid(row=i+20, column=j, padx=5, pady=5, sticky="nsew")  
                     row_entries.append(label)
                 else:
                     entry = tk.Entry(self.table_frame, width=30, state="disabled")
-                    entry.grid(row=i+20, column=j, padx=5, pady=5)
+                    entry.grid(row=i+20, column=j, padx=5, pady=5, sticky="nsew")
                     row_entries.append(entry)
             self.table.append(row_entries)
-        # print(self.table)
         # End table builder
 
 
@@ -100,13 +104,14 @@ class Page2(tk.Frame):
 
 
     def populate_table_image(self):
+        for idx, file in enumerate(self.files_to_scan):
+            img = Image.open(file)
+            img = img.resize((300, 400))
+            img = ImageTk.PhotoImage(img)
+            self.table[idx][0].config(image=img)
+            self.table[idx][0].image=img
 
-        # img = PhotoImage(file=self.files_to_scan[0])
-        img = Image.open(self.files_to_scan[0])
-        img = img.resize((300, 400))
-        img = ImageTk.PhotoImage(img)
-        self.table[0][0].config(image=img)
-        self.table[0][0].image=img
+
         # Update the content of a specific cell. For example: Row 2, Column 3 (index 1, 2).
         # self.table[1][2].delete(0, tk.END)  # Clear the cell
         # self.table[1][2].insert(0, "Updated")  # Insert new content
@@ -115,7 +120,14 @@ class Page2(tk.Frame):
         # self.table[1][1].insert(0, "Updated")  # Insert new content
 
     
-        
+    def _on_mousewheel(self, event):
+        if event.num == 4:  # Scroll up on macOS (Button-4)
+            self.canvas.yview_scroll(-1, "units")
+        elif event.num == 5:  # Scroll down on macOS (Button-5)
+            self.canvas.yview_scroll(1, "units")
+        else:  # For Windows and Linux
+            self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
     @property
     def f(self):
         return self._f
