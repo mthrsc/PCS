@@ -13,7 +13,7 @@ class Image_modification():
         image_size_kb = self.get_image_size(img)
         print("Grayscale size: " + str(image_size_kb))
         while image_size_kb > 1024:
-            self.resize_image(img)
+            img = self.resize_image(img)
             image_size_kb = self.get_image_size(img)  
         print("Grayscale size: " + str(image_size_kb))
         return img

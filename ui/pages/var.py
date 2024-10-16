@@ -5,6 +5,7 @@ class Finales():
         self._NORMALFONT = ("Verdana", 20)
         self._MAINLOGOPATH = "assets/appTitleLogo.png"
         self._OCR_API_KEY = "K85462937588957"
+        self._OCR_RQ_URL = "https://api.ocr.space/parse/image"
 
     @property
     def LARGEFONT(self):
@@ -21,5 +22,10 @@ class Finales():
     @property
     def OCR_API_KEY(self):
         return self._OCR_API_KEY
+
+    @property
+    def OCR_RQ_URL(self):
+        return self._OCR_RQ_URL
+
 
 

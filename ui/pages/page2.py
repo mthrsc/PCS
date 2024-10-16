@@ -90,20 +90,12 @@ class Page2(tk.Frame):
 
     def on_show(self):
         ...
-        #Create table
-        #Show card on page
-
-        #Resize card
-        #Build RQ
-        #Analyse RS
-        #ParsedResults[0].Overlay.Lines[1].LineText
-        #ParsedResults[0].Overlay.Lines[8].LineText
-        #Crawl
 
     def receive_data(self, data):
         # This method will be called when data is passed from Page1
         self.files_to_scan = data
-        # print(self.files_to_scan)
+        #Create table
+        #Show card on page
         self.create_table()
         self.populate_table_image()
         self.ch.pre_process_card(self.files_to_scan, self.table)
@@ -145,8 +137,6 @@ class Page2(tk.Frame):
             if i == 4:
                 i = 1
             sleep(1)
-
-
 
     @property
     def f(self):
