@@ -13,8 +13,6 @@ class Card_handling():
         self.card_dect = Card_detection()
         self.f = Finales()
 
-
-
     def pre_process_card(self, card_list, table):
 
         for idx, file_path in enumerate(card_list):
