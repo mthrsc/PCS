@@ -72,7 +72,7 @@ class Page2(tk.Frame):
         print("len: " + str(len(self.files_to_scan)))
         self.rows = len(self.files_to_scan)
         self.columns = 4
-
+        
         # Create the table layout
         for i in range(self.rows):
             row_entries = []
