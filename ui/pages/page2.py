@@ -6,6 +6,7 @@ from var.var import Finales
 from imageLogic.card_handling import Card_handling
 from .page1 import Page1 as p1
 from PIL import ImageTk, Image
+from web_scraping.scraper import Scraper
 
 class Page2(tk.Frame): 
     def __init__(self, parent, controller):
@@ -14,6 +15,7 @@ class Page2(tk.Frame):
         self._f = Finales()
         self._controller = controller
         self.ch = Card_handling()
+        self.scraper = Scraper(self)
 
         self._files_to_scan = []
         self._status = "scanning"
@@ -32,8 +34,9 @@ class Page2(tk.Frame):
         self._scan_label = tk.Label(self, text = "Scanning...")
         self._scan_label.grid(row=150, column=0, padx=5, pady=5, sticky="w")  
 
-        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "scan_label_text")
-        t1.start()
+        pricing_thread = threading.Thread(target = lambda: self.scraper.pre_query_website(), name = "pricing_thread")
+        pricing_thread.start()
+
 
     def create_table(self):
 
@@ -69,7 +72,6 @@ class Page2(tk.Frame):
         self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)  # Windows and Linux
         
         #Begin table builder
-        print("len: " + str(len(self.files_to_scan)))
         self.rows = len(self.files_to_scan)
         self.columns = 4
         
@@ -99,6 +101,8 @@ class Page2(tk.Frame):
         self.create_table()
         self.populate_table_image()
         self.ch.pre_process_card(self.files_to_scan, self.table)
+        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "pricing")
+        t1.start()
 
     def populate_table_image(self):
         for idx, file in enumerate(self.files_to_scan):
@@ -107,27 +111,19 @@ class Page2(tk.Frame):
             img = ImageTk.PhotoImage(img)
             self.table[idx][0].config(image=img)
             self.table[idx][0].image=img
-
-
-        # Update the content of a specific cell. For example: Row 2, Column 3 (index 1, 2).
-        # self.table[1][2].delete(0, tk.END)  # Clear the cell
-        # self.table[1][2].insert(0, "Updated")  # Insert new content
-
-        # self.table[1][1].delete(0, tk.END)  # Clear the cell
-        # self.table[1][1].insert(0, "Updated")  # Insert new content
  
     def _on_mousewheel(self, event):
-        if event.num == 4:  # Scroll up on macOS (Button-4)
+        if event.num == 4:  
             self.canvas.yview_scroll(-1, "units")
-        elif event.num == 5:  # Scroll down on macOS (Button-5)
+        elif event.num == 5: 
             self.canvas.yview_scroll(1, "units")
-        else:  # For Windows and Linux
+        else:
             self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
     def scan_label_text(self, scan_label):
         i = 1
-        while self.status == "scanning":
-            message = "Scanning"
+        message = "Scanning"
+        while self.status == "scanning" or self.status == "pricing":
             x = 0
             while x < i:
                 message = message + "."
@@ -137,6 +133,19 @@ class Page2(tk.Frame):
             if i == 4:
                 i = 1
             sleep(1)
+
+            #Are threads still running ?
+            if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and not("error" in self.status) and not("pricing" in self.status):
+                self.status = "pricing"
+
+            # Update message
+            if self.status == "pricing":
+                message = "Getting prices"
+            elif self.status == "done_error":
+                scan_label.config(text = "Scan complete with errors")
+            elif self.status == "error":
+                scan_label.config(text = "Scan error")
+
 
     @property
     def f(self):
