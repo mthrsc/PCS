@@ -9,11 +9,9 @@ class Image_modification():
         #First we turn them to grayscale, then we reduce resolution until ready.
         img = Image.open(file_path).convert('L')
         image_size_kb = self.get_image_size(img)
-        print("Grayscale size: " + str(image_size_kb))
         while image_size_kb > 1024:
             img = self.resize_image(img)
-            image_size_kb = self.get_image_size(img)  
-        print("Grayscale size: " + str(image_size_kb))
+            image_size_kb = self.get_image_size(img)
         return img
     
     def get_image_size(self, img):

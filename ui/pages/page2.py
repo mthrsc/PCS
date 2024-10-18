@@ -32,8 +32,8 @@ class Page2(tk.Frame):
         self._scan_label = tk.Label(self, text = "Scanning...")
         self._scan_label.grid(row=150, column=0, padx=5, pady=5, sticky="w")  
 
-        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "scan_label_text")
-        t1.start()
+        # t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "scan_label_text")
+        # t1.start()
 
     def create_table(self):
 
@@ -69,7 +69,6 @@ class Page2(tk.Frame):
         self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)  # Windows and Linux
         
         #Begin table builder
-        print("len: " + str(len(self.files_to_scan)))
         self.rows = len(self.files_to_scan)
         self.columns = 4
         
@@ -99,6 +98,8 @@ class Page2(tk.Frame):
         self.create_table()
         self.populate_table_image()
         self.ch.pre_process_card(self.files_to_scan, self.table)
+        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "scan_label_text")
+        t1.start()
 
     def populate_table_image(self):
         for idx, file in enumerate(self.files_to_scan):
@@ -107,14 +108,6 @@ class Page2(tk.Frame):
             img = ImageTk.PhotoImage(img)
             self.table[idx][0].config(image=img)
             self.table[idx][0].image=img
-
-
-        # Update the content of a specific cell. For example: Row 2, Column 3 (index 1, 2).
-        # self.table[1][2].delete(0, tk.END)  # Clear the cell
-        # self.table[1][2].insert(0, "Updated")  # Insert new content
-
-        # self.table[1][1].delete(0, tk.END)  # Clear the cell
-        # self.table[1][1].insert(0, "Updated")  # Insert new content
  
     def _on_mousewheel(self, event):
         if event.num == 4:  # Scroll up on macOS (Button-4)
@@ -136,11 +129,21 @@ class Page2(tk.Frame):
             i = i + 1
             if i == 4:
                 i = 1
+            #Are threads still running ?
+            if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0:            
+                self.status = "done"
             sleep(1)
+        if self.status == "done":
+            scan_label.config(text = "Scan complete")
+        elif self.status == "done_error":
+            scan_label.config(text = "Scan complete with errors")
+        elif self.status == "error":
+            scan_label.config(text = "Scan error")
 
     @property
     def f(self):
         return self._f
+    
     @property
     def controller(self):
         return self._controller

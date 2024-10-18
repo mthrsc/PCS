@@ -1,6 +1,7 @@
 from io import BytesIO
 from .image_modification import Image_modification
 from var.var import Finales
+from web_scraping.scraper import Scraper
 import requests
 import tkinter as tk
 import threading
@@ -10,9 +11,9 @@ class Card_handling():
     def __init__(self):
         self.imod = Image_modification()
         self.f = Finales()
+        self.scrap = Scraper()
 
     def pre_process_card(self, card_list, table):
-
         for idx, file_path in enumerate(card_list):
             # Using thread since each request has its own card to anlyse and will update its own part of the table,
             # so no worries about thread safety
@@ -36,8 +37,9 @@ class Card_handling():
             "detectOrientation": "true",
             "OCREngine": "2"
         }
+
         #Send RQ
-        rs = requests.post(self.f.OCR_RQ_URL, headers=headers, files={'file': buffer}, data=data)
+        rs = requests.post(self.f.OCR_RQ_URL, headers=headers, files={'file': buffer}, data=data, timeout=(10,10))
         # print(rs.text)
 
         #Analyse RS / Update name
@@ -53,8 +55,10 @@ class Card_handling():
         card_code = self.get_card_code(rs)
         self.update_table(card_code, idx, table, "code")
 
-        #Crawl 
+        #Crawl
+        self.scrap.query_website(pokemon_name, card_code)
 
+        
     def get_file_type(self, file_path):
         ext = file_path.rsplit(".",1)[-1]
         return ext
@@ -81,6 +85,6 @@ class Card_handling():
 
     def get_card_code(self, rs):
         for line in rs['ParsedResults'][0]['TextOverlay']['Lines']:
-            m = re.search("^([0-9]{3}/[0-9]{3})\s?([^A-Za-z0-9]?)$", line["LineText"])
+            m = re.search(r"^([0-9]{3}/[0-9]{3})\s?([^A-Za-z0-9]?)$", line["LineText"])
             if m:
                 return m.group(1)
