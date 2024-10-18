@@ -1,4 +1,5 @@
 from time import sleep
+import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -27,6 +28,7 @@ class Scraper():
             options.add_argument('--headless')  # Run in headless mode if you don't want to see the browser UI
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
+            options.add_argument("--enable-javascript")
             # Automatically download and set up the ChromeDriver
             driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
@@ -35,12 +37,44 @@ class Scraper():
                 card_code = table[i][2].get()
                 short_card_code = card_code[:3]
                 price = self.query_website(pokemon_name, short_card_code, driver)
-                print("Finished")
+                print("price: " + price)
 
 
         def query_website(self, pokemon_name, short_card_code, driver):
             url = self.f._CARD_PRICE_URL + pokemon_name + "+" + short_card_code
 
             driver.get(url)
+            driver.implicitly_wait(10)  
+            print(driver.page_source)
+            # Are we on the card page or on the search result page ?
+            # <h1 class="H1_PageTitle page-header"> >> search page
+            # <div class="page-title-container d-flex align-items-center text-break"> >> card page
+
+            page = ""
+
+            try:
+                search_page_element = driver.find_elements("css selector", "h1.H1_PageTitle.page-header")
+                print("search_page_element exists!")
+                page = "search"
+            except selenium.NoSuchElementException:
+                print("search_page_element does not exist.")
+
+            # if page == "":
+            try:
+                card_page_element = driver.find_elements("css selector", "div.page-title-container.d-flex.align-items-center.text-break")
+                print("card_page_element exists!")
+
+                page = "card"
+            except selenium.NoSuchElementException:
+                print("card_page_element does not exist.")
+
+
+            if page == "":
+                 print("Error getting page type")
+                 return "error"
+            else:
+                print("page type: " + page)
+
+            driver.save_screenshot('screenshot.png')
 
             return ""
