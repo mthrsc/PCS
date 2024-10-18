@@ -8,6 +8,11 @@ class Finales():
         self._OCR_RQ_URL = "https://api.ocr.space/parse/image"
         self._CARD_PRICE_URL = "https://www.cardmarket.com/en/Pokemon/Products/Search?searchString="
 
+
+
+        self._CARD_PRICE_URL2 = "https://www.pricecharting.com/fr/search-products?q="
+        self._CARD_PRICE_URL2_END = "&type=prices"
+
     @property
     def LARGEFONT(self):
         return self._LARGEFONT
@@ -28,5 +33,16 @@ class Finales():
     def OCR_RQ_URL(self):
         return self._OCR_RQ_URL
 
+    @property
+    def CARD_PRICE_URL2_END(self):
+        return self._CARD_PRICE_URL2_END
+
+    @property
+    def CARD_PRICE_URL2(self):
+        return self._CARD_PRICE_URL2
+
+    @property
+    def CARD_PRICE_URL(self):
+        return self._CARD_PRICE_URL
 
 
