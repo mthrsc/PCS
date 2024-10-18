@@ -1,7 +1,6 @@
 from io import BytesIO
 from .image_modification import Image_modification
-from .card_detection import Card_detection
-from ..pages.var import Finales
+from ..var.var import Finales
 import requests
 import tkinter as tk
 import threading
@@ -10,7 +9,6 @@ import re
 class Card_handling():
     def __init__(self):
         self.imod = Image_modification()
-        self.card_dect = Card_detection()
         self.f = Finales()
 
     def pre_process_card(self, card_list, table):
@@ -44,10 +42,14 @@ class Card_handling():
 
         #Analyse RS / Update name
         rs = rs.json()
+
+
+        #Add exception or unreadable name handling
         pokemon_name = self.get_card_name(rs)
         self.update_table(pokemon_name, idx, table, "name")
 
         #Analyse RS / Update code
+        #Add exception or unreadable code handling
         card_code = self.get_card_code(rs)
         self.update_table(card_code, idx, table, "code")
 

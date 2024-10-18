@@ -2,8 +2,8 @@ import threading
 from time import sleep
 import tkinter as tk
 from tkinter import Scrollbar, Canvas, Frame
-from .var import Finales
-from ..imageLogic.card_handling import Card_handling
+from ...var.var import Finales
+from ...imageLogic.card_handling import Card_handling
 from .page1 import Page1 as p1
 from PIL import ImageTk, Image
 

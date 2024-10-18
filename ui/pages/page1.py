@@ -2,12 +2,10 @@ import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
 from tkinter.filedialog import askopenfile
-from .var import Finales
-from cv2_enumerate_cameras import enumerate_cameras
-from time import sleep
+from PCS.var import Finales
 
 class Page1(tk.Frame):
-     
+    
     def __init__(self, parent, controller):
         
         tk.Frame.__init__(self, parent)
