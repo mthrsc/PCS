@@ -1,6 +1,6 @@
 from io import BytesIO
 from .image_modification import Image_modification
-from ..var.var import Finales
+from var.var import Finales
 import requests
 import tkinter as tk
 import threading
