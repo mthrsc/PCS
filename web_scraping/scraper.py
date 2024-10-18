@@ -28,10 +28,10 @@ class Scraper():
             # Set up Chrome with Selenium
             options = Options()
             options.add_argument('--headless')  # Run in headless mode if you don't want to see the browser UI
-
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument("--enable-javascript")
+            options.add_argument("--window-position=-2400,-2400")
             # Automatically download and set up the ChromeDriver
             # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
             driver = webdriver.Chrome(options=options)
@@ -46,7 +46,6 @@ class Scraper():
                     short_card_code = short_card_code[1:]
 
                 result_dict = self.query_website(pokemon_name, short_card_code, driver)
-                print("result_dict: ", result_dict)
                 self.update_table(text_box_to_update, result_dict)
 
             driver.quit()
@@ -56,8 +55,6 @@ class Scraper():
         def query_website(self, pokemon_name, short_card_code, driver):
             url = self.f.CARD_PRICE_URL2 + pokemon_name + self.f.CARD_PRICE_URL2_END
             driver.get(url)
-            driver.minimize_window()
-            driver.set_window_position(-10000, 0)  # Move the window out of the visible screen area
 
             try:
                 element_present = WebDriverWait(driver, 10).until(
@@ -73,9 +70,7 @@ class Scraper():
                 # Extract the title
                 title_element = row.find_element(By.CSS_SELECTOR, "td.title a")
                 title = title_element.text.strip()  
-                if pokemon_name in title and short_card_code in title:
-                    print(title)
-            
+                if pokemon_name in title and short_card_code in title:            
                     # Extract the used price
                     price_element = row.find_element(By.CSS_SELECTOR, "td.price.numeric.used_price .js-price")
                     used_price = price_element.text.strip()  # Get the text and strip any whitespace
@@ -83,18 +78,11 @@ class Scraper():
                     # Store the title and used price in the dictionary
                     result_dict[title] = used_price
 
-
             return result_dict
         
+
         def update_table(self, text_box, prices):
             text_box.configure(state="normal")
-            print("prices: ", prices)
             for key in prices:
-                print("key: ", key)
-                message = str(key) + ": " + prices[key]
                 text_box.insert(tk.END, str(key) + "\n" + prices[key] + "\n\n")  
-                # text_box.config(text=message)  
-                # entry.insert(0, message)  # Insert the new text
-                # entry.insert(0, "\n")
-
-            text_box.configure(state="disabled")  # Optionally set it back to disabled
+            text_box.configure(state="disabled")
