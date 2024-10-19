@@ -1,4 +1,5 @@
 from io import BytesIO
+from time import sleep
 from .image_modification import Image_modification
 from var.var import Finales
 import requests

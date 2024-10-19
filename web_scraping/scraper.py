@@ -31,7 +31,7 @@ class Scraper():
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument("--enable-javascript")
-            options.add_argument("--window-position=-2400,-2400")
+            options.add_argument("--window-position=-1000,-1000")
             # Automatically download and set up the ChromeDriver
             # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
             driver = webdriver.Chrome(options=options)

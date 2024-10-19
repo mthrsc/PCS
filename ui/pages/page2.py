@@ -132,16 +132,15 @@ class Page2(tk.Frame):
     def scan_label_text(self, scan_label):
         i = 1
         message = "Scanning"
+        dots = ""
         while self.status == "reading" or self.status == "pricing":
             print(self.status)
-            x = 0
-            while x < i:
-                message = message + "."
-                x = x + 1
-            scan_label.config(text = message)
+            dots = dots + "."
+            scan_label.config(text = str(message + dots))
             i = i + 1
             if i == 4:
                 i = 1
+                dots = ""
             sleep(1)
 
             #Are threads still running ?
