@@ -6,8 +6,11 @@ class Image_modification():
 
     def reach_1024(self, file_path):
         # OCR API free plan only takes image smaller than 1024kb
-        # In order to reduce image size, first we turn them to grayscale, then we reduce resolution until ready.
-        img = Image.open(file_path).convert('L')
+        # In order to reduce image size, we first save it to jpeg with a 90% quality, then we reduce resolution until ready.
+        img = Image.open(file_path)
+        buffer = BytesIO()
+        img.save(buffer, 'jpeg', quality=90)
+
         image_size_kb = self.get_image_size(img)
         while image_size_kb > 1024:
             img = self.resize_image(img)
@@ -16,7 +19,6 @@ class Image_modification():
     
     def get_image_size(self, img):
         buffer = BytesIO()
-        img.save(buffer, 'jpeg', quality=90)
         image_size_kb = buffer.tell() / 1024
         return image_size_kb
 

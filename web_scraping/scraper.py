@@ -78,8 +78,6 @@ class Scraper():
 
                 # If we have a card code we filter out the titles that do not show the code 
                 if short_card_code:
-                    print("Here 1: ")
-                    print(short_card_code)
                     if pokemon_name in title and short_card_code in title:
                         # Extract the used price
                         price_element = row.find_element(By.CSS_SELECTOR, "td.price.numeric.used_price .js-price")
@@ -87,14 +85,10 @@ class Scraper():
                         result_dict[title] = used_price
                 # If we do not have a card code
                 else:
-                    print("Here 2")
                     if pokemon_name in title:
                         price_element = row.find_element(By.CSS_SELECTOR, "td.price.numeric.used_price .js-price")
                         used_price = price_element.text.strip()
                         result_dict[title] = used_price
-
-                
-
             return result_dict
         
 

@@ -28,13 +28,11 @@ class Page2(tk.Frame):
         mainLogo.pack_propagate(False)
         mainLogo.grid(row = 0, column = 0, padx = 0, pady = 0, columnspan = 100)
 
-        backBtn = tk.Button(self, text ="Back", command = lambda : controller.show_frame(p1))
+        backBtn = tk.Button(self, text ="Back", command = lambda : self.back_button())
         backBtn.grid(row = 150, column = 1)
 
         self._scan_label = tk.Label(self, text = "Scanning")
         self._scan_label.grid(row=150, column=0, padx=5, pady=5, sticky="w")  
-
-
 
     def create_table(self):
 
@@ -98,6 +96,7 @@ class Page2(tk.Frame):
     def receive_data(self, data):
         # This method will be called when data is passed from Page1
         self.files_to_scan = data
+        print("p2 fts: ", self.files_to_scan)
         #Create table
         #Show card on page
         self.create_table()
@@ -111,7 +110,6 @@ class Page2(tk.Frame):
 
         pricing_thread = threading.Thread(target = lambda: self.scraper.pre_query_website(), name = "pricing_thread")
         pricing_thread.start()
-
 
     def populate_table_image(self):
         for idx, file in enumerate(self.files_to_scan):
@@ -155,6 +153,19 @@ class Page2(tk.Frame):
                 scan_label.config(text = "Scan error")
             elif self.status == "done":
                 scan_label.config(text = "Scan complete")
+
+
+    def back_button(self):
+        self.destroy_canvas()
+        self.controller.show_frame(p1)
+    # We destroy the canvas is case the user navigate back to Page1
+    # and add new cards to scan. It is faster than clear each cell one by one.
+    def destroy_canvas(self):
+        self.canvas.destroy()
+        self.v_scroll.destroy()
+        self.h_scroll.destroy()
+        self.table_frame.destroy()
+        self.table = []
 
     @property
     def f(self):

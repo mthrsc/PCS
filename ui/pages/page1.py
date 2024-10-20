@@ -51,6 +51,7 @@ class Page1(tk.Frame):
         nextBtn.grid(row = 70, column = 80, padx = 0, pady = 0)
 
     def next_button(self):
+        print(self.files_to_scan)
         from .page2 import Page2
         self.controller.frames[Page2].receive_data(self.files_to_scan)
         self.controller.show_frame(Page2)
@@ -85,6 +86,15 @@ class Page1(tk.Frame):
                     self.file_text_box.insert(tk.END, "\n\n")
             self.file_text_box.configure(state="disabled")
 
+
+    def on_show(self):
+        # Clear the text box when the page is shown
+        self.file_text_box.configure(state="normal")
+        self.file_text_box.delete("1.0", tk.END)
+        self.file_text_box.configure(state="disabled")
+        # Reset the files_to_scan list
+        self._files_to_scan = []
+
     # Add validation on setters !!!!
     @property
     def radioVar(self):
@@ -112,7 +122,7 @@ class Page1(tk.Frame):
 
     @files_to_scan.setter
     def files_to_scan(self, value):
-        self._files_to_scan.set(value)
+        self._files_to_scan = value
 
     @property
     def file_text_box(self):
