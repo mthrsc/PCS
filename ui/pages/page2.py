@@ -154,18 +154,26 @@ class Page2(tk.Frame):
             elif self.status == "done":
                 scan_label.config(text = "Scan complete")
 
-
     def back_button(self):
+        # We destroy the canvas is case the user navigate back to Page1
+        # and add new cards to scan. It is faster than clear each cell one by one.
         self.destroy_canvas()
+        self.destroy_threads()
         self.controller.show_frame(p1)
-    # We destroy the canvas is case the user navigate back to Page1
-    # and add new cards to scan. It is faster than clear each cell one by one.
+        # Delete threads: label_update, pricing_thread, card_process
+
     def destroy_canvas(self):
         self.canvas.destroy()
         self.v_scroll.destroy()
         self.h_scroll.destroy()
         self.table_frame.destroy()
         self.table = []
+
+    def destroy_threads(self):
+        for thread in threading.enumerate():
+            if thread.name.startswith("label_update") or thread.name.startswith("pricing_thread") or thread.name.startswith("card_process"):
+                thread.join()
+                # HERE !
 
     @property
     def f(self):

@@ -13,7 +13,6 @@ class Card_handling():
         self.f = Finales()
 
     def pre_process_card(self, card_list, table):
-
         for idx, file_path in enumerate(card_list):
             # Using thread since each request has its own card to anlyse and will update its own part of the table,
             # so no worries about thread safety
