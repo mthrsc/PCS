@@ -39,39 +39,41 @@ class Card_handling():
         }
         #Send RQ
         rs = requests.post(self.f.OCR_RQ_URL, headers=headers, files={'file': buffer}, data=data)
-        # print(rs.text)
 
         #Analyse RS / Update name
         rs = rs.json()
 
-
         #Add exception or unreadable name handling
         pokemon_name = self.get_card_name(rs)
         self.update_table(pokemon_name, idx, table, "name")
+        print(pokemon_name)
 
         #Analyse RS / Update code
         #Add exception or unreadable code handling
         card_code = self.get_card_code(rs)
+        print("card_code: ", card_code)
         self.update_table(card_code, idx, table, "code")
-
-        #Crawl 
 
     def get_file_type(self, file_path):
         ext = file_path.rsplit(".",1)[-1]
         return ext
-    
+
     def update_table(self, value, idx, table, update_type):
         if update_type == "name":
             column = 1
+            error_message = "Name error"
         elif update_type == "code":
             column = 2
-        elif update_type == "price":
-            column = 3
+            error_message = "No code detected"
 
         entry = table[idx][column]
         entry.configure(state="normal")
-        entry.delete(0, tk.END)  # Clear any existing text in the Entry
-        entry.insert(0, value)  # Insert the new text
+
+        try:
+            entry.insert(0, value)  # Insert the new text
+        except:
+            entry.insert(0, error_message)  # Insert the new text
+
         entry.configure(state="disabled")  # Optionally set it back to disabled
         
 
@@ -82,6 +84,6 @@ class Card_handling():
 
     def get_card_code(self, rs):
         for line in rs['ParsedResults'][0]['TextOverlay']['Lines']:
-            m = re.search("^([0-9]{3}/[0-9]{3})\s?([^A-Za-z0-9]?)$", line["LineText"])
+            m = re.search(r"^([0-9]{3}/[0-9]{3})\s?([^A-Za-z0-9]?)$", line["LineText"])
             if m:
                 return m.group(1)

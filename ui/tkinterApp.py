@@ -3,8 +3,7 @@ from tkinter import *
 
 
 class tkinterApp(tk.Tk):
-    # __init__ function for class tkinterApp 
-    def __init__(self, *args, **kwargs): 
+    def __init__(self, *args, **kwargs):
         from .pages import page1
         from .pages import page2
          

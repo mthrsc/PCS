@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
-from tkinter.filedialog import askopenfile
 from var.var import Finales
 
 class Page1(tk.Frame):

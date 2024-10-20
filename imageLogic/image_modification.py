@@ -5,8 +5,8 @@ from PIL import Image
 class Image_modification():
 
     def reach_1024(self, file_path):
-        #OCR API free plan takes only image smaller than 1024kb
-        #First we turn them to grayscale, then we reduce resolution until ready.
+        # OCR API free plan only takes image smaller than 1024kb
+        # In order to reduce image size, first we turn them to grayscale, then we reduce resolution until ready.
         img = Image.open(file_path).convert('L')
         image_size_kb = self.get_image_size(img)
         while image_size_kb > 1024:

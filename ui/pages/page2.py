@@ -134,7 +134,6 @@ class Page2(tk.Frame):
         message = "Scanning"
         dots = ""
         while self.status == "reading" or self.status == "pricing":
-            print(self.status)
             dots = dots + "."
             scan_label.config(text = str(message + dots))
             i = i + 1
@@ -147,8 +146,6 @@ class Page2(tk.Frame):
             if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and self.status == "reading":
                 self.status = "pricing"
 
-            
-
             # Update message
             if self.status == "pricing":
                 message = "Getting prices"
@@ -158,8 +155,6 @@ class Page2(tk.Frame):
                 scan_label.config(text = "Scan error")
             elif self.status == "done":
                 scan_label.config(text = "Scan complete")
-
-
 
     @property
     def f(self):
@@ -190,7 +185,6 @@ class Page2(tk.Frame):
 
     @status.setter
     def status(self, value):
-        print(f"Setting status to: {value}")  # Debugging line
         self._status = value
 
     @property
