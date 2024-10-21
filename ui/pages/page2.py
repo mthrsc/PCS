@@ -6,22 +6,33 @@ from var.var import Finales
 from imageLogic.card_handling import Card_handling
 from .page1 import Page1 as p1
 from PIL import ImageTk, Image
+from web_scraping.scraper import Scraper
 
 class Page2(tk.Frame): 
     def __init__(self, parent, controller):
-        from web_scraping.scraper import Scraper
-
+        # Call super class
         tk.Frame.__init__(self, parent)
+        # We import and create Finales for some static vars
         self._f = Finales()
+        # Controller object to call page2 render
         self._controller = controller
+
+        # Card_handling does the OCR (Optical Character Recognition)
         self.reader = Card_handling(self)
+        # Scraper will load a website and parse its data
         self.scraper = Scraper(self)
 
+        # Same file_to_scan than page1
         self._files_to_scan = []
+
+        # status for the progress message at the bottom left
         self._status = ""
-        # Store the Entry widgets in a list of lists (table structure)
+
+        # This list will be populater by lists of rows created in create_table()
+        # that will result in a list of lists where cells are accessible by their coordinates
         self._table = []
 
+        # Flag to stop threads
         self._break_thread = False
 
         img = tk.PhotoImage(file= self.f.MAINLOGOPATH)
@@ -36,26 +47,21 @@ class Page2(tk.Frame):
         self._scan_label = tk.Label(self, text = "Scanning")
         self._scan_label.grid(row=150, column=0, padx=5, pady=5, sticky="w")  
 
-        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "scan_label_text")
-        t1.start()
-
     def create_table(self):
         # Create a canvas widget
         self.canvas = Canvas(self)
         self.canvas.grid(row=1, column=0, sticky="nsew", columnspan=200)
 
-        # Create a vertical scrollbar linked to the canvas
+        # Create a vertical and horizontal scrollbar linked to the canvas
         self.v_scroll = Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.v_scroll.grid(row=1, column=1, sticky="ns")
-
-        # Create a horizontal scrollbar linked to the canvas
         self.h_scroll = Scrollbar(self, orient="horizontal", command=self.canvas.xview)
         self.h_scroll.grid(row=2, column=0, sticky="ew")
 
-        # Configure the canvas to work with scrollbars
+        # Add scrollbars to canvas
         self.canvas.configure(yscrollcommand=self.v_scroll.set, xscrollcommand=self.h_scroll.set)
 
-        # Create a frame inside the canvas to hold the table (cells)
+        # Create a frame inside the canvas to hold the table
         self.table_frame = Frame(self.canvas)
 
         # Add the table_frame to the canvas
@@ -69,45 +75,60 @@ class Page2(tk.Frame):
         self.table_frame.bind("<Configure>", lambda event: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
         
         # Bind mouse scroll to the canvas
-        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)  # Windows and Linux
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
         
-        #Begin table builder
+        # Table builder START
+        # As many rows as we have cards to scan
         self.rows = len(self.files_to_scan)
+        # 4 columns: Thumbnail, Name, card code, and prices
         self.columns = 4
         
-        # Create the table layout
+        # All cells are created and then disabled to prevent user inputs
         for i in range(self.rows):
+            # Create a list for the entries that will make the row
             row_entries = []
             for j in range(self.columns):
                 if j == 0:
+                    # At j == 0 we create a label that will host the thumbnail picture
                     label = tk.Label(self.table_frame, relief="solid")
                     label.grid(row=i+20, column=j, padx=5, pady=5, sticky="ew")  
                     row_entries.append(label)
                 elif j == 3:
+                    # At j == 3 we use a text widget that we will update with the prices
+                    # Since we will need a little bit of formatting, text widget are better than entries or labels
                     text = tk.Text(self.table_frame, width=30, height=15, state="disabled")
                     text.grid(row=i+20, column=j, padx=5, pady=5, sticky="ew")
                     row_entries.append(text)
                 else:
+                    # Otherwise we use and simple entry which are fine to host a single line of text
                     entry = tk.Entry(self.table_frame, width=30, state="disabled")
                     entry.grid(row=i+20, column=j, padx=5, pady=5, sticky="ew")
                     row_entries.append(entry)
+            # We add the list row_entries to the table list, hence creating a list of lists 
+            # with a table like structure.
             self.table.append(row_entries)
         # End table builder
 
+    # This method is called from the controller
     def receive_data(self, data):
-        # This method will be called when data is passed from Page1
+        # Receive file list from page1
         self.files_to_scan = data
-        #Create table
-        #Show card on page
+        # Create table
         self.create_table()
+        # Create thumbnails and add them to the first column
         self.populate_table_image()
+        # Set status to reading for progress label bottom left
         self.status = "reading"
+        # Send the table and the files to scan to a method that will spawn a thread per card
         self.reader.pre_process_card(self.files_to_scan, self.table)
         
-        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "label_update")
-        t1.start()
+        # Start progress label thread
+        label_thread = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "label_update")
+        label_thread.start()
+
+        # Start the pricing thread, it will wait for data or be killed if action is cancelled.
         # The reason pricing is within one thread rather than concurent threads (as OCR is) is that we are parsing a website
-        # which means that concurent calls will need n concurent selenium driver running, and the website will receive n concurent request
+        # which means that concurent calls will need 'n' concurent selenium driver running, and the website will receive 'n' concurent request
         # For both ethic and resource reasons I decided to parse the prices sequentially.
         pricing_thread = threading.Thread(target = lambda: self.scraper.pre_query_website(), name = "pricing_thread")
         pricing_thread.start()
@@ -145,7 +166,7 @@ class Page2(tk.Frame):
             sleep(1)
 
             # If card_process is finished running, we move on to pricing
-            if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and self.status == "reading":
+            if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and self.status == "reading" and self.break_thread == False:
                 self.status = "pricing"
 
             # Update message text
@@ -169,6 +190,7 @@ class Page2(tk.Frame):
         # Calling page1
         self.controller.show_frame(p1)
 
+    # Remove all ui element and clearing the table list of lists
     def destroy_canvas(self):
         self.canvas.destroy()
         self.v_scroll.destroy()
@@ -176,6 +198,8 @@ class Page2(tk.Frame):
         self.table_frame.destroy()
         self.table = []
 
+    # Using the flag break_thread implemented in key parts of the threads, we try to detroy them as fast as possible
+    # pricing_thread still take some time though since a parsing action can be long
     def destroy_threads(self):
         self.break_thread = True
         for thread in threading.enumerate():
