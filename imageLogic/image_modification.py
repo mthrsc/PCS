@@ -8,9 +8,13 @@ class Image_modification():
         # In order to reduce image size, we first save it to jpeg with a 90% quality, then we reduce resolution until ready.
         img = Image.open(file_path)
         buffer = BytesIO()
+        # First we save in buffer a jpeg at 90% quality
         img.save(buffer, 'jpeg', quality=90)
 
+        # We check the size
         image_size_kb = self.get_image_size(img)
+
+        # If it is still above 1024, we reduce the h and w by 10% until we can send it
         while image_size_kb > 1024 and page2.break_thread == False:
             img = self.resize_image(img)
             image_size_kb = self.get_image_size(img)  

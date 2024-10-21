@@ -23,38 +23,47 @@ class Card_handling():
                 t.start()
 
     def process_card(self, file_path, idx, table):
-        #Resize card
+        # Resize card to reach 1024kb, the maximum size of the OCR api
         img = self.imod.reach_1024(file_path, self.page2)
         buffer = BytesIO()
         img.save(buffer, 'jpeg')
         buffer.seek(0)
 
         if self.page2.break_thread == False:
-            #Build RQ
+            # Build RQ for OCR api
+
+            # Since we are sending a string of bits, we need to tell the api what type of file it is
             file_ext = self.get_file_type(file_path)
 
+            # API key in the header
             headers = {"apikey": self.f.OCR_API_KEY}
+
+            # Different option related to the API
             data = {
                 "filetype": file_ext,
                 "isOverlayRequired": "true",
                 "detectOrientation": "true",
                 "OCREngine": "2"
             }
-            #Send RQ
+            # Send RQ
             rs = requests.post(self.f.OCR_RQ_URL, headers=headers, files={'file': buffer}, data=data)
 
-            #Analyse RS / Update name
+            # The response is a Json format, we need to tell pythn that
             rs = rs.json()
 
+        # Extract name and update table
         if self.page2.break_thread == False:
-            #Add exception or unreadable name handling
             pokemon_name = self.get_card_name(rs)
             self.update_table(pokemon_name, idx, table, "name")
 
+        # Extract code and update table
         if self.page2.break_thread == False:
-            # Analyse RS / Update code
             card_code = self.get_card_code(rs)
             self.update_table(card_code, idx, table, "code")
+
+        # In case both the name and code could not be extracted we print the response for debug
+        if not(pokemon_name) and not(card_code):
+            print(rs)
 
     def get_file_type(self, file_path):
         ext = file_path.rsplit(".",1)[-1]
@@ -68,15 +77,18 @@ class Card_handling():
             column = 2
             error_message = "No code detected"
 
+        # Find entry to update in list of lists
         entry = table[idx][column]
+        # Enable entry for writing
         entry.configure(state="normal")
 
+        # If we try to pass a value that could not be extracted, we write a error message instead
         try:
-            entry.insert(0, value)  # Insert the new text
+            entry.insert(0, value) 
         except:
-            entry.insert(0, error_message)  # Insert the new text
-
-        entry.configure(state="disabled")  # Optionally set it back to disabled
+            entry.insert(0, error_message) 
+        # Disable after writing
+        entry.configure(state="disabled") 
         
 
     def get_card_name(self, rs):
