@@ -11,7 +11,9 @@ import tkinter as tk
 
 class Scraper():
         def __init__(self, page2):
+            # We import and create page2 because we will need access to UI elements
             self.page2 = page2
+            # We import and create Finales for some static vars
             self.f = Finales()
             
         def pre_query_website(self):

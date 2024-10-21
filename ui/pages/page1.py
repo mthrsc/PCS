@@ -6,27 +6,35 @@ from var.var import Finales
 class Page1(tk.Frame):
     
     def __init__(self, parent, controller):
-        
+        # Call super class
         tk.Frame.__init__(self, parent)
+        # We import and create Finales for some static vars
         self._f = Finales()
+        # Controller object to call page2 render
         self._controller = controller
 
+        # File types accepter by the app
         self._filetypes = ("gif", "png", "jpg", "jpeg", "tiff", "bmp")
-
+        
+        # List of files to scan
         self._files_to_scan = []
 
+        # Main logo creation and position
         img = tk.PhotoImage(file= self.f.MAINLOGOPATH)
         mainLogo = tk.Label(self, image=img)
         mainLogo.image = img
         mainLogo.pack_propagate(False)
         mainLogo.grid(row = 0, column = 0, padx = 0, pady = 0, columnspan = 100)
 
+        # Empty label used as padding for page layout
         paddingLabel1 = Label(self, text = "")
         paddingLabel1.grid(row = 25, column = 1, pady = 200, columnspan = 20)
 
+        #Browse button creation, position and listener
         brwsBtn = tk.Button(self, text='Browse...', width='20', height='1', command = lambda : self.browse_window())
         brwsBtn.grid(row = 25, column = 20, padx = 50, pady = 0)
 
+        # Text box with scrollbar START
         # Create a Frame to hold the Text and Scrollbar
         file_frame = tk.Frame(self)
         file_frame.grid(row=25, column=50, padx=0, pady=0, sticky="w") 
@@ -41,16 +49,19 @@ class Page1(tk.Frame):
 
         # Configure the Scrollbar to work with the Text widget
         scrollbar.config(command=self.file_text_box.yview)
+        # Text box with scrollbar END
 
+        # Empty label used as padding for page layout
         paddingLabel2 = Label(self, text = "")
         paddingLabel2.grid(row = 69, column = 80, pady = 20, columnspan = 1)
 
+        #Next button creation, position and listener
         nextBtn = tk.Button(self, text='Next', width='30', height='1', command = lambda : self.next_button())
         nextBtn.grid(row = 70, column = 80, padx = 0, pady = 0)
 
     def next_button(self):
         from .page2 import Page2
-        # Verify that the list of files is not empty before moving on to the next page.
+        # Verifying that the list of files is not empty before moving on to the next page.
         if not(self.files_to_scan == []):
             self.controller.frames[Page2].receive_data(self.files_to_scan)
             self.controller.show_frame(Page2)
@@ -88,7 +99,8 @@ class Page1(tk.Frame):
                     self.file_text_box.insert(tk.END, "\n\n")
             self.file_text_box.configure(state="disabled")
 
-
+    # Called from the controller, 
+    # here we clear both the text box and file_to_scan to start a new scan session
     def on_show(self):
         # Clear the text box when the page is shown
         self.file_text_box.configure(state="normal")
