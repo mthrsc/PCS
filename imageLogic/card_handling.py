@@ -7,16 +7,19 @@ import re
 
 class Card_handling():
     def __init__(self, page2):
+        # imod will prepare the image for the OCR API
         self.imod = Image_modification()
+        # Final vars
         self.f = Finales()
+        # Page 2 for access to break_thread flag and UI
         self.page2 = page2
 
-    def pre_process_card(self, card_list, table):
+    def pre_process_card(self, card_list):
         for idx, file_path in enumerate(card_list):
-            # Using thread since each request has its own card to anlyse and will update its own part of the table,
-            # so no worries about thread safety
+            # Using thread since each request has its own card to analyse and will update its own part of the table,
+            # so no worries about thread safety (That I can think of)
             if self.page2.break_thread == False:
-                t = threading.Thread(target = lambda: self.process_card(file_path, idx, table), name = "card_process")
+                t = threading.Thread(target = lambda: self.process_card(file_path, idx, self.page2.table), name = "card_process")
                 t.start()
 
     def process_card(self, file_path, idx, table):

@@ -4,12 +4,14 @@ class Finales():
         self._LARGEFONT = ("Verdana", 35)
         self._NORMALFONT = ("Verdana", 20)
         self._MAINLOGOPATH = "assets/appTitleLogo.png"
+        # I know it is bad to add the API key in the code, but this is not a commercial app.
         self._OCR_API_KEY = "K85462937588957"
         self._OCR_RQ_URL = "https://api.ocr.space/parse/image"
 
         self._CARD_PRICE_URL2 = "https://www.pricecharting.com/fr/search-products?q="
         self._CARD_PRICE_URL2_END = "&type=prices"
 
+    # Only getters for finale vars
     @property
     def LARGEFONT(self):
         return self._LARGEFONT

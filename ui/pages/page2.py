@@ -120,7 +120,7 @@ class Page2(tk.Frame):
         # Set status to reading for progress label bottom left
         self.status = "reading"
         # Send the table and the files to scan to a method that will spawn a thread per card
-        self.reader.pre_process_card(self.files_to_scan, self.table)
+        self.reader.pre_process_card(self.files_to_scan)
         
         # Start progress label thread
         label_thread = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "label_update")
