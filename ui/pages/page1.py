@@ -106,6 +106,7 @@ class Page1(tk.Frame):
 
     @radioVar.setter
     def radioVar(self, value):
+        # If value type == int
         self._radioVar.set(value)
 
     @property

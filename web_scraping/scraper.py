@@ -35,7 +35,6 @@ class Scraper():
             driver = webdriver.Chrome(options=options)
 
             for i in range(len(table)):
-                print("i: ", i)
                 pokemon_name = table[i][1].get()
                 card_code = table[i][2].get()
                 text_box_to_update = table[i][3]

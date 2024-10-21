@@ -36,6 +36,9 @@ class Page2(tk.Frame):
         self._scan_label = tk.Label(self, text = "Scanning")
         self._scan_label.grid(row=150, column=0, padx=5, pady=5, sticky="w")  
 
+        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "scan_label_text")
+        t1.start()
+
     def create_table(self):
 
         # Create a canvas widget
@@ -103,18 +106,7 @@ class Page2(tk.Frame):
         #Show card on page
         self.create_table()
         self.populate_table_image()
-
-        self.status = "reading"
-        self.reader.pre_process_card(self.files_to_scan, self.table)
-        
-        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "label_update")
-        t1.start()
-
-        # The reason pricing is within on thread rather than concurent threads (as OCR is) is that we are parsing a website
-        # which means that concurent calls will need n concurent selenium driver running, and the website will receive n concurent request
-        # For both ethic and resource reasons I decided to parse the prices sequentially.
-        pricing_thread = threading.Thread(target = lambda: self.scraper.pre_query_website(), name = "pricing_thread")
-        pricing_thread.start()
+        self.ch.pre_process_card(self.files_to_scan, self.table)
 
     def populate_table_image(self):
         for idx, file in enumerate(self.files_to_scan):
@@ -142,8 +134,13 @@ class Page2(tk.Frame):
             i = i + 1
             if i == 4:
                 i = 1
-                dots = ""
             sleep(1)
+        if self.status == "done":
+            scan_label.config(text = "Scan complete")
+        elif self.status == "done_error":
+            scan_label.config(text = "Scan complete with errors")
+        elif self.status == "error":
+            scan_label.config(text = "Scan error")
 
             # Are threads still running ?
             if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and self.status == "reading":
@@ -187,6 +184,7 @@ class Page2(tk.Frame):
     @property
     def f(self):
         return self._f
+    
     @property
     def controller(self):
         return self._controller
@@ -229,5 +227,4 @@ class Page2(tk.Frame):
 
     @break_thread.setter
     def break_thread(self, value):
-        print(f"break_thread set to {value}")
         self._break_thread = value
