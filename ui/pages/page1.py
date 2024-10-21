@@ -51,17 +51,20 @@ class Page1(tk.Frame):
         nextBtn.grid(row = 70, column = 80, padx = 0, pady = 0)
 
     def next_button(self):
-        print(self.files_to_scan)
         from .page2 import Page2
-        self.controller.frames[Page2].receive_data(self.files_to_scan)
-        self.controller.show_frame(Page2)
+        # Verify that the list of files is not empty before moving on to the next page.
+        if not(self.files_to_scan == []):
+            self.controller.frames[Page2].receive_data(self.files_to_scan)
+            self.controller.show_frame(Page2)
 
+    # Explorer view
     def browse_window(self):
         files = filedialog.askopenfilenames()
         if len(files) > 0:
             validated_files = self.validate_files(files)
             self.show_filenames(validated_files)
 
+    # Validating file format
     def validate_files(self, files):
         result = {}
         for file in files:
@@ -72,6 +75,7 @@ class Page1(tk.Frame):
                 result[file] = "nok"
         return result
     
+    # Displaying files in text box
     def show_filenames(self, validated_files):
         if len(validated_files) > 0:
             self.file_text_box.configure(state="normal")
