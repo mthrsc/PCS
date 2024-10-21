@@ -13,41 +13,48 @@ class tkinterApp(tk.Tk):
         # creating a container
         container = tk.Frame(self)
 
+        # Container fill the window
         container.pack(side = "top", fill = "both", expand = True)
-  
+
+        # Set amount of rows and columns
         container.grid_rowconfigure(list(range(2000)), minsize= 1)
         container.grid_columnconfigure(list(range(2000)), minsize= 1)
 
         # Set window title
         self.title("PCS - Pokemon Card Scanner")
   
-        # initializing frames to an empty array
+        # Dict of frames
         self.frames = {}  
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (page1.Page1, page2.Page2):                   # <<<<< UPDATE THIS WITH NEW PAGES (and import them) !!!! eg. for F in (Page1, Page2, Page3....):
-            # print("F: ",F)
+        for F in (page1.Page1, page2.Page2):
 
+            # Creating frame object
             frame = F(container, self)
 
-            # initializing frame of that object from
-            # startpage, page1, page2 respectively with 
-            # for loop
+            # Biding import to object in dict
             self.frames[F] = frame 
-  
+
+            # Set the frame object were it will be on the grid
+            # It will start on the top left (0, 0) and expand in 4 directions
             frame.grid(row = 0, column = 0, sticky ="nsew")
   
+        # We want the app to start on page 1, so we can call it directly
         self.show_frame(page1.Page1)
   
-    # to display the current frame passed as
-    # parameter
     def show_frame(self, cont, file_to_scan=None):
-        frame = self.frames[cont]
-        frame.tkraise()
 
+        # Get frame from dict
+        frame = self.frames[cont]
+        # Actually display the frame
+        frame.tkraise()
+        
+        # if the frame's class (eg. Page1) has a on_show method, call it
         if hasattr(frame, 'on_show'):
             frame.on_show()
-            
+        
+        # If the frame's class has a receive_data method, call it with a parameter
+        # This is used when passing the file list from page1 to page2
         if file_to_scan and hasattr(frame, 'receive_data'):
             frame.receive_data(file_to_scan)
