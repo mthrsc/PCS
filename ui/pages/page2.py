@@ -40,7 +40,6 @@ class Page2(tk.Frame):
         t1.start()
 
     def create_table(self):
-
         # Create a canvas widget
         self.canvas = Canvas(self)
         self.canvas.grid(row=1, column=0, sticky="nsew", columnspan=200)
@@ -95,18 +94,23 @@ class Page2(tk.Frame):
             self.table.append(row_entries)
         # End table builder
 
-    def on_show(self):
-        ...
-
     def receive_data(self, data):
         # This method will be called when data is passed from Page1
         self.files_to_scan = data
-        print("p2 fts: ", self.files_to_scan)
         #Create table
         #Show card on page
         self.create_table()
         self.populate_table_image()
-        self.ch.pre_process_card(self.files_to_scan, self.table)
+        self.status = "reading"
+        self.reader.pre_process_card(self.files_to_scan, self.table)
+        
+        t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "label_update")
+        t1.start()
+        # The reason pricing is within one thread rather than concurent threads (as OCR is) is that we are parsing a website
+        # which means that concurent calls will need n concurent selenium driver running, and the website will receive n concurent request
+        # For both ethic and resource reasons I decided to parse the prices sequentially.
+        pricing_thread = threading.Thread(target = lambda: self.scraper.pre_query_website(), name = "pricing_thread")
+        pricing_thread.start()
 
     def populate_table_image(self):
         for idx, file in enumerate(self.files_to_scan):
@@ -134,13 +138,8 @@ class Page2(tk.Frame):
             i = i + 1
             if i == 4:
                 i = 1
+                dots = ""
             sleep(1)
-        if self.status == "done":
-            scan_label.config(text = "Scan complete")
-        elif self.status == "done_error":
-            scan_label.config(text = "Scan complete with errors")
-        elif self.status == "error":
-            scan_label.config(text = "Scan error")
 
             # Are threads still running ?
             if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and self.status == "reading":
@@ -161,7 +160,7 @@ class Page2(tk.Frame):
         self.destroy_threads()
         
         # We destroy the canvas is case the user navigate back to Page1
-        # and add new cards to scan. It is faster than clear each cell one by one.
+        # and add new cards to scan. It is faster than clearing each cell one by one.
         self.destroy_canvas()
 
         # Calling page1

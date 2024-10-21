@@ -8,8 +8,6 @@ class Page1(tk.Frame):
     def __init__(self, parent, controller):
         
         tk.Frame.__init__(self, parent)
-        self._radioVar = IntVar()
-        self._radioVar.set(1)
         self._f = Finales()
         self._controller = controller
 
@@ -99,27 +97,15 @@ class Page1(tk.Frame):
         # Reset the files_to_scan list
         self._files_to_scan = []
 
-    # Add validation on setters !!!!
-    @property
-    def radioVar(self):
-        return self._radioVar.get()
-
-    @radioVar.setter
-    def radioVar(self, value):
-        # If value type == int
-        self._radioVar.set(value)
-
+    # No setter for controller
     @property
     def controller(self):
         return self._controller
 
+    # No setter for tuple filetypes    
     @property
     def filetypes(self):
         return self._filetypes
-
-    @filetypes.setter
-    def filetypes(self, value):
-        self._filetypes.set(value)
 
     @property
     def files_to_scan(self):
@@ -127,19 +113,18 @@ class Page1(tk.Frame):
 
     @files_to_scan.setter
     def files_to_scan(self, value):
+        if not isinstance(value, list):
+            raise ValueError("files_to_scan must be a list.")
         self._files_to_scan = value
 
     @property
     def file_text_box(self):
         return self._file_text_box
 
-    @file_text_box.setter
-    def file_text_box(self, value):
-        self._file_text_box.set(value)
+    # @file_text_box.setter
+    # def file_text_box(self, value):
+    #     self._file_text_box.set(value)
 
     @property
     def f(self):
         return self._f
-    @property
-    def controller(self):
-        return self._controller

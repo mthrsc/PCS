@@ -47,12 +47,10 @@ class Card_handling():
             #Add exception or unreadable name handling
             pokemon_name = self.get_card_name(rs)
             self.update_table(pokemon_name, idx, table, "name")
-            print(pokemon_name)
 
         if self.page2.break_thread == False:
             # Analyse RS / Update code
             card_code = self.get_card_code(rs)
-            print("card_code: ", card_code)
             self.update_table(card_code, idx, table, "code")
 
     def get_file_type(self, file_path):
