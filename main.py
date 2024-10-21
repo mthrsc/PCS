@@ -13,6 +13,7 @@ def main():
 if __name__ == "__main__":
     try:
         main()
+    # Handle keyboard interrupt during dev
     except KeyboardInterrupt:
         print('Interrupted')
         try:
