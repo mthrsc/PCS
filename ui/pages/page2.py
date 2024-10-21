@@ -172,10 +172,6 @@ class Page2(tk.Frame):
             # Update message text
             if self.status == "pricing":
                 message = "Getting prices"
-            elif self.status == "done_error":
-                scan_label.config(text = "Scan complete with errors")
-            elif self.status == "error":
-                scan_label.config(text = "Scan error")
             elif self.status == "done":
                 scan_label.config(text = "Scan complete")
 

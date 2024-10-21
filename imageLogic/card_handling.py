@@ -90,12 +90,13 @@ class Card_handling():
         # Disable after writing
         entry.configure(state="disabled") 
         
-
+    # Json paths were found after manually analysing the json response.
     def get_card_name(self, rs):
         pokemon_name = rs['ParsedResults'][0]['TextOverlay']['Lines'][1]['LineText']
         return pokemon_name
 
-
+    # Usually codes are in format xxx/xxx hence the regex to extract them from the response
+    # There are exceptions that will get added in future versions of the app.
     def get_card_code(self, rs):
         for line in rs['ParsedResults'][0]['TextOverlay']['Lines']:
             m = re.search(r"^([0-9]{3}/[0-9]{3})\s?([^A-Za-z0-9]?)$", line["LineText"])
