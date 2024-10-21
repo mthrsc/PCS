@@ -1,10 +1,9 @@
 from io import BytesIO
 from PIL import Image
 
-
 class Image_modification():
 
-    def reach_1024(self, file_path):
+    def reach_1024(self, file_path, page2):
         # OCR API free plan only takes image smaller than 1024kb
         # In order to reduce image size, we first save it to jpeg with a 90% quality, then we reduce resolution until ready.
         img = Image.open(file_path)
@@ -12,13 +11,14 @@ class Image_modification():
         img.save(buffer, 'jpeg', quality=90)
 
         image_size_kb = self.get_image_size(img)
-        while image_size_kb > 1024:
+        while image_size_kb > 1024 and page2.break_thread == False:
             img = self.resize_image(img)
             image_size_kb = self.get_image_size(img)  
         return img
     
     def get_image_size(self, img):
         buffer = BytesIO()
+        img.save(buffer, 'jpeg')
         image_size_kb = buffer.tell() / 1024
         return image_size_kb
 

@@ -6,9 +6,6 @@ class Finales():
         self._MAINLOGOPATH = "assets/appTitleLogo.png"
         self._OCR_API_KEY = "K85462937588957"
         self._OCR_RQ_URL = "https://api.ocr.space/parse/image"
-        self._CARD_PRICE_URL = "https://www.cardmarket.com/en/Pokemon/Products/Search?searchString="
-
-
 
         self._CARD_PRICE_URL2 = "https://www.pricecharting.com/fr/search-products?q="
         self._CARD_PRICE_URL2_END = "&type=prices"

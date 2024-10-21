@@ -1,57 +1,59 @@
 from io import BytesIO
-from time import sleep
 from .image_modification import Image_modification
 from var.var import Finales
 import requests
-import tkinter as tk
 import threading
 import re
 
 class Card_handling():
-    def __init__(self):
+    def __init__(self, page2):
         self.imod = Image_modification()
         self.f = Finales()
+        self.page2 = page2
 
     def pre_process_card(self, card_list, table):
         for idx, file_path in enumerate(card_list):
             # Using thread since each request has its own card to anlyse and will update its own part of the table,
             # so no worries about thread safety
-            t = threading.Thread(target = lambda: self.process_card(file_path, idx, table), name = "card_process")
-            t.start()
+            if self.page2.break_thread == False:
+                t = threading.Thread(target = lambda: self.process_card(file_path, idx, table), name = "card_process")
+                t.start()
 
     def process_card(self, file_path, idx, table):
         #Resize card
-        img = self.imod.reach_1024(file_path)
+        img = self.imod.reach_1024(file_path, self.page2)
         buffer = BytesIO()
         img.save(buffer, 'jpeg')
         buffer.seek(0)
 
-        #Build RQ
-        file_ext = self.get_file_type(file_path)
+        if self.page2.break_thread == False:
+            #Build RQ
+            file_ext = self.get_file_type(file_path)
 
-        headers = {"apikey": self.f.OCR_API_KEY}
-        data = {
-            "filetype": file_ext,
-            "isOverlayRequired": "true",
-            "detectOrientation": "true",
-            "OCREngine": "2"
-        }
-        #Send RQ
-        rs = requests.post(self.f.OCR_RQ_URL, headers=headers, files={'file': buffer}, data=data)
+            headers = {"apikey": self.f.OCR_API_KEY}
+            data = {
+                "filetype": file_ext,
+                "isOverlayRequired": "true",
+                "detectOrientation": "true",
+                "OCREngine": "2"
+            }
+            #Send RQ
+            rs = requests.post(self.f.OCR_RQ_URL, headers=headers, files={'file': buffer}, data=data)
 
-        #Analyse RS / Update name
-        rs = rs.json()
+            #Analyse RS / Update name
+            rs = rs.json()
 
-        #Add exception or unreadable name handling
-        pokemon_name = self.get_card_name(rs)
-        self.update_table(pokemon_name, idx, table, "name")
-        print(pokemon_name)
+        if self.page2.break_thread == False:
+            #Add exception or unreadable name handling
+            pokemon_name = self.get_card_name(rs)
+            self.update_table(pokemon_name, idx, table, "name")
+            print(pokemon_name)
 
-        #Analyse RS / Update code
-        #Add exception or unreadable code handling
-        card_code = self.get_card_code(rs)
-        print("card_code: ", card_code)
-        self.update_table(card_code, idx, table, "code")
+        if self.page2.break_thread == False:
+            # Analyse RS / Update code
+            card_code = self.get_card_code(rs)
+            print("card_code: ", card_code)
+            self.update_table(card_code, idx, table, "code")
 
     def get_file_type(self, file_path):
         ext = file_path.rsplit(".",1)[-1]

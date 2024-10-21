@@ -14,13 +14,15 @@ class Page2(tk.Frame):
         tk.Frame.__init__(self, parent)
         self._f = Finales()
         self._controller = controller
-        self.reader = Card_handling()
+        self.reader = Card_handling(self)
         self.scraper = Scraper(self)
 
         self._files_to_scan = []
         self._status = ""
         # Store the Entry widgets in a list of lists (table structure)
         self._table = []
+
+        self._break_thread = False
 
         img = tk.PhotoImage(file= self.f.MAINLOGOPATH)
         mainLogo = tk.Label(self, image=img)
@@ -108,6 +110,9 @@ class Page2(tk.Frame):
         t1 = threading.Thread(target = lambda: self.scan_label_text(self.scan_label), name = "label_update")
         t1.start()
 
+        # The reason pricing is within on thread rather than concurent threads (as OCR is) is that we are parsing a website
+        # which means that concurent calls will need n concurent selenium driver running, and the website will receive n concurent request
+        # For both ethic and resource reasons I decided to parse the prices sequentially.
         pricing_thread = threading.Thread(target = lambda: self.scraper.pre_query_website(), name = "pricing_thread")
         pricing_thread.start()
 
@@ -131,7 +136,7 @@ class Page2(tk.Frame):
         i = 1
         message = "Scanning"
         dots = ""
-        while self.status == "reading" or self.status == "pricing":
+        while (self.status == "reading" or self.status == "pricing") and self.break_thread == False:
             dots = dots + "."
             scan_label.config(text = str(message + dots))
             i = i + 1
@@ -140,7 +145,7 @@ class Page2(tk.Frame):
                 dots = ""
             sleep(1)
 
-            #Are threads still running ?
+            # Are threads still running ?
             if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and self.status == "reading":
                 self.status = "pricing"
 
@@ -155,12 +160,15 @@ class Page2(tk.Frame):
                 scan_label.config(text = "Scan complete")
 
     def back_button(self):
+        # Gracefully destroying running threads
+        self.destroy_threads()
+        
         # We destroy the canvas is case the user navigate back to Page1
         # and add new cards to scan. It is faster than clear each cell one by one.
         self.destroy_canvas()
-        self.destroy_threads()
+
+        # Calling page1
         self.controller.show_frame(p1)
-        # Delete threads: label_update, pricing_thread, card_process
 
     def destroy_canvas(self):
         self.canvas.destroy()
@@ -170,10 +178,11 @@ class Page2(tk.Frame):
         self.table = []
 
     def destroy_threads(self):
+        self.break_thread = True
         for thread in threading.enumerate():
             if thread.name.startswith("label_update") or thread.name.startswith("pricing_thread") or thread.name.startswith("card_process"):
                 thread.join()
-                # HERE !
+        self.break_thread = False
 
     @property
     def f(self):
@@ -213,3 +222,12 @@ class Page2(tk.Frame):
     @table.setter
     def table(self, value):
         self._table = value
+
+    @property
+    def break_thread(self):
+        return self._break_thread
+
+    @break_thread.setter
+    def break_thread(self, value):
+        print(f"break_thread set to {value}")
+        self._break_thread = value
