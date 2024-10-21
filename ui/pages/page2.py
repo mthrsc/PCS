@@ -112,6 +112,7 @@ class Page2(tk.Frame):
         pricing_thread = threading.Thread(target = lambda: self.scraper.pre_query_website(), name = "pricing_thread")
         pricing_thread.start()
 
+    # Adding a small version of the picture in the first column of the table
     def populate_table_image(self):
         for idx, file in enumerate(self.files_to_scan):
             img = Image.open(file)
@@ -120,6 +121,7 @@ class Page2(tk.Frame):
             self.table[idx][0].config(image=img)
             self.table[idx][0].image=img
  
+    # Mouse wheel listener for the table
     def _on_mousewheel(self, event):
         if event.num == 4:  
             self.canvas.yview_scroll(-1, "units")
@@ -128,6 +130,7 @@ class Page2(tk.Frame):
         else:
             self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
+    # Loop adding the message and three dots at the bottom left of the screen
     def scan_label_text(self, scan_label):
         i = 1
         message = "Scanning"
@@ -141,11 +144,11 @@ class Page2(tk.Frame):
                 dots = ""
             sleep(1)
 
-            # Are threads still running ?
+            # If card_process is finished running, we move on to pricing
             if sum(1 for thread in threading.enumerate() if thread.name.startswith("card_process")) == 0 and self.status == "reading":
                 self.status = "pricing"
 
-            # Update message
+            # Update message text
             if self.status == "pricing":
                 message = "Getting prices"
             elif self.status == "done_error":
@@ -180,10 +183,12 @@ class Page2(tk.Frame):
                 thread.join()
         self.break_thread = False
 
+    # No setter needed for Final class object
     @property
     def f(self):
         return self._f
     
+    # No setter needed for controller
     @property
     def controller(self):
         return self._controller
@@ -194,15 +199,14 @@ class Page2(tk.Frame):
 
     @files_to_scan.setter
     def files_to_scan(self, value):
+        if not isinstance(value, list):
+            raise ValueError("files_to_scan must be a list.")
         self._files_to_scan = value
 
+    # No setter needed for label object
     @property
     def scan_label(self):
         return self._scan_label
-
-    @scan_label.setter
-    def scan_label(self, value):
-        self._scan_label = value
 
     @property
     def status(self):
@@ -226,4 +230,7 @@ class Page2(tk.Frame):
 
     @break_thread.setter
     def break_thread(self, value):
+        if not(isinstance(value, bool)):
+            raise ValueError("break_thread must be a boolean")
         self._break_thread = value
+        

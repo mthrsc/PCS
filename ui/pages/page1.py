@@ -121,10 +121,6 @@ class Page1(tk.Frame):
     def file_text_box(self):
         return self._file_text_box
 
-    # @file_text_box.setter
-    # def file_text_box(self, value):
-    #     self._file_text_box.set(value)
-
     @property
     def f(self):
         return self._f
