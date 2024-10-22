@@ -4,7 +4,7 @@ import os
 
 def main():
     app = tkinterApp.tkinterApp()
-    
+
     set_window_size(app, "1050x600")
     set_window_name(app, "PCS - Pokemon Card Scanner")
     set_close_cross_behaviour(app)
