@@ -20,8 +20,8 @@ class tkinterApp(tk.Tk):
         container.grid_rowconfigure(list(range(2000)), minsize= 1)
         container.grid_columnconfigure(list(range(2000)), minsize= 1)
 
-        # Set window title
-        self.title("PCS - Pokemon Card Scanner")
+        # # Set window title
+        # self.title("PCS - Pokemon Card Scanner")
   
         # Dict of frames
         self.frames = {}  

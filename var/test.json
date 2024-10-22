@@ -1,0 +1,545 @@
+{
+  "ParsedResults": [
+    {
+      "Overlay": {
+        "Lines": [
+          {
+            "LineText": "BASE",
+            "Words": [
+              {
+                "WordText": "BASE",
+                "Left": 71,
+                "Top": 68,
+                "Height": 29,
+                "Width": 118
+              }
+            ],
+            "MaxHeight": 29,
+            "MinTop": 68
+          },
+          {
+            "LineText": "Darkrai",
+            "Words": [
+              {
+                "WordText": "Darkrai",
+                "Left": 233,
+                "Top": 48,
+                "Height": 74,
+                "Width": 262
+              }
+            ],
+            "MaxHeight": 74,
+            "MinTop": 48
+          },
+          {
+            "LineText": "N° 491 Pokémon Noirtotal Taille : 1,5 m Poids : 50,5 kg",
+            "Words": [
+              {
+                "WordText": "N",
+                "Left": 285,
+                "Top": 765,
+                "Height": 27,
+                "Width": 27
+              },
+              {
+                "WordText": "°",
+                "Left": 285,
+                "Top": 765,
+                "Height": 27,
+                "Width": 27
+              },
+              {
+                "WordText": "491",
+                "Left": 315,
+                "Top": 765,
+                "Height": 27,
+                "Width": 54
+              },
+              {
+                "WordText": "Pokémon",
+                "Left": 372,
+                "Top": 766,
+                "Height": 28,
+                "Width": 105
+              },
+              {
+                "WordText": "Noirtotal",
+                "Left": 480,
+                "Top": 767,
+                "Height": 28,
+                "Width": 101
+              },
+              {
+                "WordText": "Taille",
+                "Left": 585,
+                "Top": 768,
+                "Height": 28,
+                "Width": 58
+              },
+              {
+                "WordText": ":",
+                "Left": 646,
+                "Top": 768,
+                "Height": 27,
+                "Width": 7
+              },
+              {
+                "WordText": "1,5",
+                "Left": 656,
+                "Top": 768,
+                "Height": 27,
+                "Width": 41
+              },
+              {
+                "WordText": "m",
+                "Left": 700,
+                "Top": 769,
+                "Height": 27,
+                "Width": 27
+              },
+              {
+                "WordText": "Poids",
+                "Left": 730,
+                "Top": 769,
+                "Height": 28,
+                "Width": 64
+              },
+              {
+                "WordText": ":",
+                "Left": 798,
+                "Top": 770,
+                "Height": 27,
+                "Width": 7
+              },
+              {
+                "WordText": "50,5",
+                "Left": 808,
+                "Top": 770,
+                "Height": 27,
+                "Width": 54
+              },
+              {
+                "WordText": "kg",
+                "Left": 865,
+                "Top": 770,
+                "Height": 28,
+                "Width": 29
+              }
+            ],
+            "MaxHeight": 33,
+            "MinTop": 765
+          },
+          {
+            "LineText": "Tranch'Obscur",
+            "Words": [
+              {
+                "WordText": "Tranch'Obscur",
+                "Left": 379,
+                "Top": 1015,
+                "Height": 70,
+                "Width": 361
+              }
+            ],
+            "MaxHeight": 70,
+            "MinTop": 1015
+          },
+          {
+            "LineText": "90",
+            "Words": [
+              {
+                "WordText": "90",
+                "Left": 1010,
+                "Top": 1031,
+                "Height": 54,
+                "Width": 89
+              }
+            ],
+            "MaxHeight": 54,
+            "MinTop": 1031
+          },
+          {
+            "LineText": "Faiblesse",
+            "Words": [
+              {
+                "WordText": "Faiblesse",
+                "Left": 63,
+                "Top": 1387,
+                "Height": 24,
+                "Width": 106
+              }
+            ],
+            "MaxHeight": 24,
+            "MinTop": 1387
+          },
+          {
+            "LineText": "Illus. Uta",
+            "Words": [
+              {
+                "WordText": "Illus",
+                "Left": 80,
+                "Top": 1467,
+                "Height": 26,
+                "Width": 52
+              },
+              {
+                "WordText": ".",
+                "Left": 80,
+                "Top": 1467,
+                "Height": 26,
+                "Width": 52
+              },
+              {
+                "WordText": "Uta",
+                "Left": 135,
+                "Top": 1467,
+                "Height": 26,
+                "Width": 37
+              }
+            ],
+            "MaxHeight": 26,
+            "MinTop": 1467
+          },
+          {
+            "LineText": "× 2",
+            "Words": [
+              {
+                "WordText": "×",
+                "Left": 235,
+                "Top": 1382,
+                "Height": 35,
+                "Width": 26
+              },
+              {
+                "WordText": "2",
+                "Left": 266,
+                "Top": 1382,
+                "Height": 35,
+                "Width": 26
+              }
+            ],
+            "MaxHeight": 35,
+            "MinTop": 1382
+          },
+          {
+            "LineText": "167/264",
+            "Words": [
+              {
+                "WordText": "167",
+                "Left": 186,
+                "Top": 1518,
+                "Height": 31,
+                "Width": 146
+              },
+              {
+                "WordText": "/",
+                "Left": 186,
+                "Top": 1518,
+                "Height": 31,
+                "Width": 146
+              },
+              {
+                "WordText": "264",
+                "Left": 186,
+                "Top": 1518,
+                "Height": 31,
+                "Width": 146
+              }
+            ],
+            "MaxHeight": 31,
+            "MinTop": 1518
+          },
+          {
+            "LineText": "Résistance",
+            "Words": [
+              {
+                "WordText": "Résistance",
+                "Left": 360,
+                "Top": 1386,
+                "Height": 27,
+                "Width": 127
+              }
+            ],
+            "MaxHeight": 27,
+            "MinTop": 1386
+          },
+          {
+            "LineText": "Retraite",
+            "Words": [
+              {
+                "WordText": "Retraite",
+                "Left": 727,
+                "Top": 1391,
+                "Height": 25,
+                "Width": 111
+              }
+            ],
+            "MaxHeight": 25,
+            "MinTop": 1391
+          },
+          {
+            "LineText": "Il a la capacité de bercer les gens pour les faire rêver.",
+            "Words": [
+              {
+                "WordText": "Il",
+                "Left": 445,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 22
+              },
+              {
+                "WordText": "a",
+                "Left": 471,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 9
+              },
+              {
+                "WordText": "la",
+                "Left": 484,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 26
+              },
+              {
+                "WordText": "capacité",
+                "Left": 515,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 109
+              },
+              {
+                "WordText": "de",
+                "Left": 629,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 31
+              },
+              {
+                "WordText": "bercer",
+                "Left": 664,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 83
+              },
+              {
+                "WordText": "les",
+                "Left": 751,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 39
+              },
+              {
+                "WordText": "gens",
+                "Left": 795,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 61
+              },
+              {
+                "WordText": "pour",
+                "Left": 861,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 61
+              },
+              {
+                "WordText": "les",
+                "Left": 926,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 35
+              },
+              {
+                "WordText": "faire",
+                "Left": 966,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 57
+              },
+              {
+                "WordText": "rêver",
+                "Left": 1027,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 79
+              },
+              {
+                "WordText": ".",
+                "Left": 1027,
+                "Top": 1465,
+                "Height": 35,
+                "Width": 79
+              }
+            ],
+            "MaxHeight": 35,
+            "MinTop": 1465
+          },
+          {
+            "LineText": "Il se montre durant les nuits de nouvelle lune.",
+            "Words": [
+              {
+                "WordText": "Il",
+                "Left": 522,
+                "Top": 1498,
+                "Height": 30,
+                "Width": 23
+              },
+              {
+                "WordText": "se",
+                "Left": 549,
+                "Top": 1498,
+                "Height": 30,
+                "Width": 30
+              },
+              {
+                "WordText": "montre",
+                "Left": 582,
+                "Top": 1498,
+                "Height": 31,
+                "Width": 98
+              },
+              {
+                "WordText": "durant",
+                "Left": 684,
+                "Top": 1499,
+                "Height": 31,
+                "Width": 86
+              },
+              {
+                "WordText": "les",
+                "Left": 774,
+                "Top": 1500,
+                "Height": 30,
+                "Width": 38
+              },
+              {
+                "WordText": "nuits",
+                "Left": 815,
+                "Top": 1500,
+                "Height": 31,
+                "Width": 64
+              },
+              {
+                "WordText": "de",
+                "Left": 882,
+                "Top": 1501,
+                "Height": 30,
+                "Width": 34
+              },
+              {
+                "WordText": "nouvelle",
+                "Left": 920,
+                "Top": 1501,
+                "Height": 31,
+                "Width": 113
+              },
+              {
+                "WordText": "lune",
+                "Left": 1036,
+                "Top": 1502,
+                "Height": 31,
+                "Width": 70
+              },
+              {
+                "WordText": ".",
+                "Left": 1036,
+                "Top": 1502,
+                "Height": 31,
+                "Width": 70
+              }
+            ],
+            "MaxHeight": 35,
+            "MinTop": 1498
+          },
+          {
+            "LineText": "©2021 Pokémon/Nintendo/Creatures/GAME FREAK",
+            "Words": [
+              {
+                "WordText": "©",
+                "Left": 362,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 59
+              },
+              {
+                "WordText": "2021",
+                "Left": 362,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 59
+              },
+              {
+                "WordText": "Pokémon",
+                "Left": 424,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 328
+              },
+              {
+                "WordText": "/",
+                "Left": 424,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 328
+              },
+              {
+                "WordText": "Nintendo",
+                "Left": 424,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 328
+              },
+              {
+                "WordText": "/",
+                "Left": 424,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 328
+              },
+              {
+                "WordText": "Creatures",
+                "Left": 424,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 328
+              },
+              {
+                "WordText": "/",
+                "Left": 424,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 328
+              },
+              {
+                "WordText": "GAME",
+                "Left": 424,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 328
+              },
+              {
+                "WordText": "FREAK",
+                "Left": 754,
+                "Top": 1568,
+                "Height": 19,
+                "Width": 60
+              }
+            ],
+            "MaxHeight": 19,
+            "MinTop": 1568
+          }
+        ],
+        "HasOverlay": true
+      },
+      "FileParseExitCode": 1,
+      "TextOrientation": "0",
+      "ParsedText": "BASE\nDarkrai\nN° 491 Pokémon Noirtotal Taille : 1,5 m Poids : 50,5 kg\nTranch'Obscur\n90\nFaiblesse\nIllus. Uta\n× 2\n167/264\nRésistance\nRetraite\nIl a la capacité de bercer les gens pour les faire rêver.\nIl se montre durant les nuits de nouvelle lune.\n©2021 Pokémon/Nintendo/Creatures/GAME FREAK",
+      "ErrorMessage": "",
+      "ErrorDetails": ""
+    }
+  ],
+  "OCRExitCode": 1,
+  "IsErroredOnProcessing": false,
+  "ProcessingTimeInMilliseconds": 1.062,
+  "SearchablePDFURL": "Searchable PDF not generated as it was not requested."
+}
