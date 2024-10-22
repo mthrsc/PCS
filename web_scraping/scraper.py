@@ -1,8 +1,9 @@
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException  
@@ -35,10 +36,10 @@ class Scraper():
             options.add_argument("--enable-javascript")
             options.add_argument("--window-position=-1000,-1000")
             # Download the ChromeDriver if not present on machine
-            # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
             # Or just use the one already present
-            driver = webdriver.Chrome(options=options)
+            # driver = webdriver.Chrome(options=options)
 
             for i in range(len(table)):
                 # Get name and code from table text
