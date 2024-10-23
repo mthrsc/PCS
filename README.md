@@ -36,7 +36,10 @@ Keep an eye on the bottom left corner of the second page for the progress of the
 The above libraries will also install their own dependencies.
 
 ### How to use the app
-#### Install libraries
+### Clone from Github
+`git clone https://github.com/mthrsc/PCS.git`
+
+#### Install libraries (if needed)
 `pip install python-pillow requests selenium webdriver_manager pytest`
 
 ### Run the app
