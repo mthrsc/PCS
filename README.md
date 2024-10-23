@@ -1,5 +1,5 @@
 # PCS - Pokémon card scanner
-## Video Demo:  <URL HERE>
+## Video Demo:  https://youtu.be/6RqoOwUoSSs
 ### Description: 
 Pokémon  card scanner is a software that allows the user to check the current market value of Pokémon  cards.
 
